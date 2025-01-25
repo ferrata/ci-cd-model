@@ -183,9 +183,8 @@ export function ActionGraph({ className, height, graph, ...rest }: Props) {
   }, [graph.orientation, initialNodes, initialEdges])
 
   return (
-    <div className={className}>
+    <div className={className} style={{ height }}>
       <ReactFlow
-        className={`min-h-[${height}px]`}
         nodes={nodes}
         edges={edges}
         connectionMode={ConnectionMode.Loose}
