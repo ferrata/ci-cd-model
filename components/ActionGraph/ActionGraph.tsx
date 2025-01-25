@@ -44,6 +44,7 @@ type EdgeProps = {
 
 interface Props {
   className: string
+  height: number
   graph: GraphProps
   nodes: Array<NodeProps>
   edges: Array<EdgeProps>
@@ -143,7 +144,7 @@ function calculateGraph(
   return { nodes: calculatedNodes, edges }
 }
 
-export function ActionGraph({ className, graph, ...rest }: Props) {
+export function ActionGraph({ className, height, graph, ...rest }: Props) {
   const dagreGraph = useRef(new Graph())
   dagreGraph.current.setDefaultEdgeLabel(() => ({}))
 
@@ -171,13 +172,15 @@ export function ActionGraph({ className, graph, ...rest }: Props) {
   }, [graph.orientation, initialNodes, initialEdges])
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div className={className}>
       <ReactFlow
+        className={`min-h-[${height}px]`}
         nodes={nodes}
         edges={edges}
         connectionMode={ConnectionMode.Loose}
         nodeTypes={nodeTypes}
         connectionLineType={ConnectionLineType.SmoothStep}
+        fitView
       >
         <Background bgColor={graph.backgroundColor} />
         <Controls />

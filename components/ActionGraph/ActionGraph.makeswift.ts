@@ -66,6 +66,7 @@ runtime.registerComponent(
     label: 'Custom / ActionGraph',
     props: {
       className: Style(),
+      height: Number({ label: "Height", defaultValue: 700 }),
       graph,
       nodes,
       edges,
