@@ -39,8 +39,16 @@ const nodes = List({
     props: {
       id: TextInput({ label: "ID", defaultValue: "" }),
       label: TextInput({ label: "Text", defaultValue: "" }),
-      time: Number({ label: "Time (ms)", suffix: " ms", defaultValue: 2000 }),
       isCalculated: Checkbox({ label: "Calculated", defaultValue: false }),
+      colorizeTime: Checkbox({ label: "Colorize time", defaultValue: false }),
+      time: Number({ label: "Time (ms)", suffix: " ms", defaultValue: 2000 }),
+      timeRanges: Group({
+        label: "Time ranges (ms)",
+        props: {
+          poor: Number({ label: "Poor", suffix: " ms", defaultValue: 10000 }),
+          bad: Number({ label: "Bad", suffix: " ms", defaultValue: 1200000 }),
+        },
+      }),
     },
   }),
   getItemLabel: (item) => item?.label ?? 'Untitled',

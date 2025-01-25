@@ -33,6 +33,11 @@ type NodeProps = {
   id: string
   label: string
   time: number
+  timeRanges: {
+    poor: number
+    bad: number
+  }
+  colorizeTime: boolean
   isCalculated: boolean
 }
 
@@ -54,7 +59,13 @@ function toNode(props: NodeProps): Node {
   return {
     type: 'action',
     id: props.id,
-    data: { label: props.label, time: props.time, isCalculated: props.isCalculated },
+    data: {
+      label: props.label,
+      time: props.time,
+      timeRanges: props.timeRanges,
+      colorizeTime: props.colorizeTime,
+      isCalculated: props.isCalculated,
+    },
     position: { x: 100, y: 200 },
   }
 }

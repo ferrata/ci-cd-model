@@ -5,6 +5,11 @@ export type NodeData = {
   id: string
   label: string
   time: number
+  timeRanges: {
+    poor: number
+    bad: number
+  }
+  colorizeTime: boolean
   isCalculated: boolean
 }
 
@@ -14,13 +19,13 @@ function durationToHumanReadable(duration: number) {
   return `${minutes}m ${seconds}s`
 }
 
-const redAlertAt = 5000
-const yellowAlertAt = 2000
-
-function nodeStyle(time: number, isCalculated: boolean): string {
-  if (!isCalculated) {
+function nodeStyle({ time, timeRanges, isCalculated, colorizeTime }: NodeData): string {
+  if (!isCalculated && !colorizeTime) {
     return 'bg-slate-100 text-slate-400'
   }
+
+  const redAlertAt = timeRanges.bad
+  const yellowAlertAt = timeRanges.poor
 
   if (time >= yellowAlertAt && time < redAlertAt) {
     return 'bg-yellow-200 text-yellow-900'
@@ -38,7 +43,9 @@ export function ActionNode({ data, sourcePosition, targetPosition }: NodeProps<N
         <span className={clsx('flex-grow', data.time > 0 ? '' : 'text-center')}>{data.label}</span>
 
         {data.time > 0 && (
-          <span className={clsx('rounded-full p-1 px-2', nodeStyle(data.time, data.isCalculated))}>
+          <span
+            className={clsx('h-6 text-nowrap rounded-full p-1 px-2 text-center', nodeStyle(data))}
+          >
             {durationToHumanReadable(data.time)}
           </span>
         )}
