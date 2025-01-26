@@ -1,19 +1,20 @@
 {
   "private": true,
   "scripts": {
-    "dev": "PORT=4100 next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "icons": "npx @svgr/cli --typescript --replace-attr-values \"#000=currentColor\" --out-dir generated/icons -- public/icons"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.1.0",
+    "@dagrejs/dagre": "^1.1.4",
     "@makeswift/runtime": "^0.23.1",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-tabs": "^1.0.4",
     "@xyflow/react": "^12.4.2",
     "clsx": "^2.0.0",
-    "@dagrejs/dagre": "^1.1.4",
     "next": "^14.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
