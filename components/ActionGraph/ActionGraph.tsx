@@ -1,15 +1,15 @@
 'use client'
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 
 import { layout } from '@dagrejs/dagre'
 import { Graph } from '@dagrejs/graphlib'
 import {
   Background,
-  ConnectionLineType,
-  ConnectionMode,
   Controls,
   Edge,
+  EdgeMarker,
+  MarkerType,
   Node,
   Position,
   ReactFlow,
@@ -45,6 +45,8 @@ type EdgeProps = {
   fromNodeID: string
   toNodeID: string
   animated: boolean
+  autoLayout: boolean
+  markerEnd: 'arrow' | 'arrowclosed' | 'none'
 }
 
 interface Props {
@@ -70,6 +72,25 @@ function toNode(props: NodeProps): Node {
   }
 }
 
+function toEdge(props: EdgeProps): Edge {
+  const markerEnd: EdgeMarker | undefined =
+    props.markerEnd === 'none'
+      ? undefined
+      : {
+          type: props.markerEnd as MarkerType,
+          width: 25,
+          height: 25,
+        }
+
+  return {
+    id: `edge-${props.fromNodeID}-${props.toNodeID}`,
+    source: props.fromNodeID,
+    target: props.toNodeID,
+    animated: props.animated,
+    markerEnd: markerEnd,
+  }
+}
+
 const nodeWidth = 200
 const nodeHeight = 50
 
@@ -90,20 +111,15 @@ function calculateGraph(
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight })
   })
 
-  const edges: Edge[] = args.edges
-    .filter(
-      edge =>
-        edge.fromNodeID &&
-        edge.toNodeID &&
-        dagreGraph.node(edge.fromNodeID) &&
-        dagreGraph.node(edge.toNodeID)
-    )
-    .map(edge => ({
-      id: `edge-${edge.fromNodeID}-${edge.toNodeID}`,
-      source: edge.fromNodeID,
-      target: edge.toNodeID,
-      animated: edge.animated,
-    }))
+  const initialEdges: EdgeProps[] = args.edges.filter(
+    edge =>
+      edge.fromNodeID &&
+      edge.toNodeID &&
+      dagreGraph.node(edge.fromNodeID) &&
+      dagreGraph.node(edge.toNodeID)
+  )
+
+  const edges: Edge[] = initialEdges.filter(edge => edge.autoLayout).map(toEdge)
 
   edges.forEach(edge => {
     dagreGraph.setEdge(edge.source, edge.target)
@@ -138,21 +154,35 @@ function calculateGraph(
   // @ts-ignore: types mismatch
   layout(dagreGraph)
 
+  let lastFreeNodeY = 25
+
   const calculatedNodes: Node[] = initialNodes.map(node => {
+    const edges = dagreGraph.nodeEdges(node.id) ?? []
+
     const nodeWithPosition = dagreGraph.node(node.id)
     const timing = calculatedTiming.get(node.id) ?? node.data.time ?? 0
     const newNode = {
       ...node,
       targetPosition: isHorizontal ? Position.Left : Position.Top,
       sourcePosition: isHorizontal ? Position.Right : Position.Bottom,
-      position: { x: nodeWithPosition.x, y: nodeWithPosition.y },
+      position:
+        edges.length > 0
+          ? { x: nodeWithPosition.x, y: nodeWithPosition.y }
+          : { x: -200, y: lastFreeNodeY },
       data: { ...node.data, time: timing },
     }
+
+    lastFreeNodeY += edges.length === 0 ? 100 : 0
 
     return newNode
   })
 
-  return { nodes: calculatedNodes, edges }
+  const calculatedEdges: Edge[] = [
+    ...edges,
+    ...initialEdges.filter(edge => !edge.autoLayout).map(toEdge),
+  ]
+
+  return { nodes: calculatedNodes, edges: calculatedEdges }
 }
 
 export function ActionGraph({ className, height, graph, ...rest }: Props) {
@@ -184,14 +214,7 @@ export function ActionGraph({ className, height, graph, ...rest }: Props) {
 
   return (
     <div className={className} style={{ height }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        connectionMode={ConnectionMode.Loose}
-        nodeTypes={nodeTypes}
-        connectionLineType={ConnectionLineType.SmoothStep}
-        fitView
-      >
+      <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView>
         <Background bgColor={graph.backgroundColor} />
         <Controls />
       </ReactFlow>

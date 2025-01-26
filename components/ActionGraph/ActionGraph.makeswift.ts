@@ -62,6 +62,16 @@ const edges = List({
       fromNodeID: TextInput({ label: "From node ID", defaultValue: "" }),
       toNodeID: TextInput({ label: "To node ID", defaultValue: "" }),
       animated: Checkbox({ label: "Animated", defaultValue: true }),
+      autoLayout: Checkbox({ label: "Auto layout", defaultValue: true }),
+      markerEnd: Select({
+        label: "Marker",
+        options: [
+          { value: "none", label: "None" },
+          { value: "arrow", label: "Arrow" },
+          { value: "arrowclosed", label: "Closed arrow" },
+        ],
+        defaultValue: "none",
+      }),
     },
   }),
   getItemLabel: (item) => `${item?.fromNodeID ?? 'empty'} -> ${item?.toNodeID ?? 'empty'}`,

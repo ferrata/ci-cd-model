@@ -37,8 +37,18 @@ function nodeStyle({ time, timeRanges, isCalculated, colorizeTime }: NodeData): 
 }
 
 export function ActionNode({ data, sourcePosition, targetPosition }: NodeProps<Node<NodeData>>) {
+  const isStartNode = data.time === 0 && data.isCalculated === false
+  const isEndNode = data.isCalculated === true
+
   return (
-    <div className="flex w-48 flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-2 text-xs shadow-lg">
+    <div
+      className={clsx(
+        'flex w-48 flex-col items-center justify-center rounded-lg border p-2 text-xs shadow-lg',
+        isStartNode && 'border-violet-200 bg-violet-50',
+        isEndNode && 'border-slate-300 bg-slate-100',
+        !isStartNode && !isEndNode && 'border-slate-200 bg-slate-50'
+      )}
+    >
       <div className="my-2 flex h-3 w-full flex-row items-center justify-between gap-1 px-2 text-xs">
         <span className={clsx('flex-grow', data.time > 0 ? '' : 'text-center')}>{data.label}</span>
 
