@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { draftMode } from 'next/headers'
 
-import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { ClerkProvider, SignInButton, SignedOut } from '@clerk/nextjs'
 import { DraftModeScript } from '@makeswift/runtime/next/server'
 import { isAuthProviderEnabled } from 'utils/is-auth-provider-enabled'
 
@@ -49,7 +49,7 @@ export default async function RootLayout({
               <SignedOut>
                 <div className="mt-20 flex h-full items-center justify-center">
                   <SignInButton mode="modal">
-                    <span className="flex w-56 cursor-pointer justify-center rounded-lg bg-gray-100 p-4">
+                    <span className="flex cursor-pointer justify-center rounded-lg bg-gray-600 p-4 px-6 text-white">
                       Sign in
                     </span>
                   </SignInButton>
