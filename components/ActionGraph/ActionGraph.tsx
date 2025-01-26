@@ -47,6 +47,7 @@ type EdgeProps = {
   toNodeID: string
   animated: boolean
   autoLayout: boolean
+  type: string
   markerEnd: 'arrow' | 'arrowclosed' | 'none'
 }
 
@@ -88,6 +89,7 @@ function toEdge(props: EdgeProps): Edge {
     source: props.fromNodeID,
     target: props.toNodeID,
     animated: props.animated,
+    type: props.type,
     markerEnd: markerEnd,
   }
 }

@@ -63,6 +63,14 @@ const edges = List({
       toNodeID: TextInput({ label: "To node ID", defaultValue: "" }),
       animated: Checkbox({ label: "Animated", defaultValue: true }),
       autoLayout: Checkbox({ label: "Auto layout", defaultValue: true }),
+      type: Select({
+        label: "Type",
+        options: [
+          { value: "default", label: "Bezier" },
+          { value: "smoothstep", label: "Smooth step" },
+        ],
+        defaultValue: "default",
+      }),
       markerEnd: Select({
         label: "Marker",
         options: [
