@@ -28,7 +28,7 @@ function nodeStyle({ time, timeRanges, isCalculated, colorizeTime }: NodeData): 
   const yellowAlertAt = timeRanges.poor
 
   if (time >= yellowAlertAt && time < redAlertAt) {
-    return 'bg-yellow-200 text-yellow-900'
+    return 'bg-yellow-100 text-yellow-600'
   } else if (time >= redAlertAt) {
     return 'bg-red-100 text-red-500'
   } else {
