@@ -46,7 +46,7 @@ const nodes = List({
         label: "Time ranges (ms)",
         props: {
           poor: Number({ label: "Poor", suffix: " ms", defaultValue: 10000 }),
-          bad: Number({ label: "Bad", suffix: " ms", defaultValue: 1200000 }),
+          bad: Number({ label: "Bad", suffix: " ms", defaultValue: 600000 }),
         },
       }),
     },
