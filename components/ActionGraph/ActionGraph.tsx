@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { layout } from '@dagrejs/dagre'
 import { Graph } from '@dagrejs/graphlib'
@@ -17,6 +17,7 @@ import {
   useNodesState,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import clsx from 'clsx'
 
 import { ActionNode, NodeData } from './ActionNode'
 
@@ -186,6 +187,8 @@ function calculateGraph(
 }
 
 export function ActionGraph({ className, height, graph, ...rest }: Props) {
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
   const dagreGraph = useRef(new Graph())
   dagreGraph.current.setDefaultEdgeLabel(() => ({}))
 
@@ -212,8 +215,23 @@ export function ActionGraph({ className, height, graph, ...rest }: Props) {
     setEdges(recalculatedEdges)
   }, [graph.orientation, initialNodes, initialEdges])
 
+  useEffect(() => {
+    setIsLoading(false)
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="m-8 flex h-full w-full items-center justify-center text-slate-600">
+        Loading...
+      </div>
+    )
+  }
+
   return (
-    <div className={className} style={{ height }}>
+    <div
+      className={clsx(className, 'overflow-hidden rounded-lg border border-slate-200')}
+      style={{ height }}
+    >
       <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView>
         <Background bgColor={graph.backgroundColor} />
         <Controls />
