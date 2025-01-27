@@ -236,7 +236,7 @@ export function ActionGraph({ className, height, graph, ...rest }: Props) {
   return (
     <div className={clsx(className, 'relative rounded-lg border border-slate-200')}>
       <button
-        className="absolute z-50 rounded px-4 py-4"
+        className="absolute bottom-0 z-50 mx-4 my-4 rounded"
         onClick={() => setIsInteractive(!isInteractive)}
       >
         <Image
@@ -258,7 +258,12 @@ export function ActionGraph({ className, height, graph, ...rest }: Props) {
       <div className={clsx('relative overflow-hidden rounded-lg')} style={{ height }}>
         <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView>
           <Background bgColor={graph.backgroundColor} />
-          <Controls showInteractive={false} />
+          <Controls
+            showInteractive={false}
+            showFitView={isInteractive}
+            showZoom={isInteractive}
+            className="!bottom-10"
+          />
         </ReactFlow>
       </div>
     </div>
