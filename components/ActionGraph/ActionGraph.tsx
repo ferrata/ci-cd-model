@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { layout } from '@dagrejs/dagre'
@@ -19,7 +20,9 @@ import {
 import '@xyflow/react/dist/style.css'
 import clsx from 'clsx'
 
-import { ActionNode, NodeData } from './ActionNode'
+import LockedIcon from '../../assets/icons/locked.svg'
+import UnlockedIcon from '../../assets/icons/unlocked.svg'
+import { ActionNode } from './ActionNode'
 
 const nodeTypes = {
   action: ActionNode,
@@ -190,6 +193,7 @@ function calculateGraph(
 
 export function ActionGraph({ className, height, graph, ...rest }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isInteractive, setIsInteractive] = useState<boolean>(false)
 
   const dagreGraph = useRef(new Graph())
   dagreGraph.current.setDefaultEdgeLabel(() => ({}))
@@ -230,14 +234,33 @@ export function ActionGraph({ className, height, graph, ...rest }: Props) {
   }
 
   return (
-    <div
-      className={clsx(className, 'overflow-hidden rounded-lg border border-slate-200')}
-      style={{ height }}
-    >
-      <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView>
-        <Background bgColor={graph.backgroundColor} />
-        <Controls />
-      </ReactFlow>
+    <div className={clsx(className, 'relative rounded-lg border border-slate-200')}>
+      <button
+        className="absolute z-50 rounded px-4 py-4"
+        onClick={() => setIsInteractive(!isInteractive)}
+      >
+        <Image
+          className="react-flow__controls-button"
+          src={isInteractive ? UnlockedIcon.src : LockedIcon.src}
+          width={12}
+          height={12}
+          alt={isInteractive ? 'Unlock' : 'Lock'}
+        />
+      </button>
+
+      <div
+        className={clsx(
+          'pointer-events-auto absolute inset-0 z-40 rounded-lg bg-white bg-opacity-20',
+          isInteractive && 'hidden'
+        )}
+      ></div>
+
+      <div className={clsx('relative overflow-hidden rounded-lg')} style={{ height }}>
+        <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView>
+          <Background bgColor={graph.backgroundColor} />
+          <Controls showInteractive={false} />
+        </ReactFlow>
+      </div>
     </div>
   )
 }
