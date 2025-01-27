@@ -54,7 +54,11 @@ export function ActionNode({ data, sourcePosition, targetPosition }: NodeProps<N
 
         {data.time > 0 && (
           <span
-            className={clsx('h-6 text-nowrap rounded-full p-1 px-2 text-center', nodeStyle(data))}
+            className={clsx(
+              'h-6 text-nowrap rounded-full p-1 px-2 text-center',
+              nodeStyle(data),
+              isEndNode && 'animate-fadeIn'
+            )}
           >
             {durationToHumanReadable(data.time)}
           </span>

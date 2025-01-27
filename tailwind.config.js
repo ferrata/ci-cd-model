@@ -19,11 +19,16 @@ module.exports = {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-100%)' },
         },
+        fadeIn: {
+          from: { opacity: 0 },
+          to: { opacity: 1 },
+        },
       },
       animation: {
         expand: 'expand 400ms cubic-bezier(1, 0, 0.25, 1)',
         collapse: 'collapse 400ms cubic-bezier(1, 0, 0.25, 1)',
         scrollLeft: 'scrollLeft var(--marquee-duration) linear infinite',
+        fadeIn: 'fadeIn 1s ease-in-out',
       },
     },
   },
