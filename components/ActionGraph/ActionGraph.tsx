@@ -236,14 +236,13 @@ export function ActionGraph({ className, height, graph, ...rest }: Props) {
   return (
     <div className={clsx(className, 'relative rounded-lg border border-slate-200')}>
       <button
-        className="absolute bottom-0 z-50 mx-4 my-4 rounded"
+        className={clsx('react-flow__controls-button', 'absolute bottom-0 z-50 mx-4 my-4')}
         onClick={() => setIsInteractive(!isInteractive)}
       >
         <Image
-          className="react-flow__controls-button"
           src={isInteractive ? UnlockedIcon.src : LockedIcon.src}
-          width={12}
-          height={12}
+          width={14}
+          height={14}
           alt={isInteractive ? 'Unlock' : 'Lock'}
         />
       </button>
