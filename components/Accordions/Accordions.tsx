@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode, Ref, forwardRef } from 'react'
+import React, { ReactNode } from 'react'
 
 import * as Accordion from '@radix-ui/react-accordion'
 import clsx from 'clsx'
@@ -10,19 +10,15 @@ type AccordionItem = {
   body: ReactNode
 }
 
-type Props = {
-  className?: string
-  accordions: AccordionItem[]
-  type: 'single' | 'multiple'
+interface Props {
+  className: string
+  accordions: Array<AccordionItem>
 }
 
-export const Accordions = forwardRef(function Accordions(
-  { className, accordions, type = 'multiple' }: Props,
-  ref: Ref<HTMLUListElement>
-) {
+export function Accordions({ className, accordions }: Props) {
   return (
-    <Accordion.Root type={type} asChild>
-      <ul className={clsx(className, 'w-full space-y-5')} ref={ref}>
+    <Accordion.Root type={'multiple'} asChild>
+      <ul className={clsx(className, 'w-full space-y-5')}>
         {accordions.length === 0 ? (
           <div className="p-6 text-center text-lg">There are no Accordions. Try adding some.</div>
         ) : (
@@ -64,6 +60,4 @@ export const Accordions = forwardRef(function Accordions(
       </ul>
     </Accordion.Root>
   )
-})
-
-export default Accordions
+}

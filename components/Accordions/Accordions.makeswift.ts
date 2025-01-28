@@ -1,36 +1,32 @@
-import { lazy } from 'react'
-
-import { List, Select, Shape, Slot, Style } from '@makeswift/runtime/controls'
+import { Group, List, Slot, Style, TextInput } from '@makeswift/runtime/controls'
 
 import { runtime } from '@/lib/makeswift/runtime'
 
+import { Accordions } from './'
+
+export const ACCORDION_COMPONENT_TYPE = "makeswift-action-graph";
+
+const accordions = List({
+  label: "Accordions",
+  type: Group({
+    label: "Accordion",
+    props: {
+      label: TextInput({ label: "Title", defaultValue: "" }),
+      title: Slot(),
+      body: Slot(),
+    },
+  }),
+  getItemLabel: (item) => item?.label ?? 'Untitled',
+})
+
 runtime.registerComponent(
-  lazy(() => import('./Accordions')),
+  Accordions,
   {
     type: 'accordions',
     label: 'Custom / Accordions',
     props: {
       className: Style(),
-      accordions: List({
-        label: 'Accordions',
-        type: Shape({
-          type: {
-            title: Slot(),
-            body: Slot(),
-          },
-        }),
-        getItemLabel() {
-          return 'Slot'
-        },
-      }),
-      type: Select({
-        label: 'Type',
-        options: [
-          { label: 'Single', value: 'single' },
-          { label: 'Multiple', value: 'multiple' },
-        ],
-        defaultValue: 'multiple',
-      }),
-    },
+      accordions
+    }
   }
 )
