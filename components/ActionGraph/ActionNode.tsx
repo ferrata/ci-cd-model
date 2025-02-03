@@ -1,6 +1,8 @@
 import { Handle, Node, NodeProps, Position } from '@xyflow/react'
 import clsx from 'clsx'
 
+import { TimeLabel } from '../time-label'
+
 export type NodeData = {
   id: string
   label: string
@@ -11,29 +13,6 @@ export type NodeData = {
   }
   colorizeTime: boolean
   isCalculated: boolean
-}
-
-function durationToHumanReadable(duration: number) {
-  const minutes = Math.floor(duration / 1000 / 60)
-  const seconds = Math.floor(duration / 1000) % 60
-  return `${minutes}m ${seconds}s`
-}
-
-function nodeStyle({ time, timeRanges, isCalculated, colorizeTime }: NodeData): string {
-  if (!isCalculated && !colorizeTime) {
-    return 'bg-slate-100 text-slate-400'
-  }
-
-  const redAlertAt = timeRanges.bad
-  const yellowAlertAt = timeRanges.poor
-
-  if (time >= yellowAlertAt && time < redAlertAt) {
-    return 'bg-yellow-100 text-yellow-600'
-  } else if (time >= redAlertAt) {
-    return 'bg-red-100 text-red-500'
-  } else {
-    return 'bg-green-100 text-green-600'
-  }
 }
 
 export function ActionNode({ data, sourcePosition, targetPosition }: NodeProps<Node<NodeData>>) {
@@ -53,15 +32,12 @@ export function ActionNode({ data, sourcePosition, targetPosition }: NodeProps<N
         <span className={clsx('flex-grow', data.time > 0 ? '' : 'text-center')}>{data.label}</span>
 
         {data.time > 0 && (
-          <span
-            className={clsx(
-              'h-6 text-nowrap rounded-full p-1 px-2 text-center',
-              nodeStyle(data),
-              isEndNode && 'animate-fadeIn'
-            )}
-          >
-            {durationToHumanReadable(data.time)}
-          </span>
+          <TimeLabel
+            animated={data.isCalculated}
+            colorizeTime={data.colorizeTime || data.isCalculated}
+            timeRanges={data.timeRanges}
+            time={data.time}
+          />
         )}
       </div>
 
