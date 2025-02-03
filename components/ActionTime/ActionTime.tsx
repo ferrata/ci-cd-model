@@ -28,7 +28,7 @@ export function ActionTime({ className, time, timeRanges, animated, colorizeTime
     <div className={clsx(className, 'flex flex-col items-center justify-center')}>
       <Link href={link.href} target={link.target}>
         <TimeLabel
-          className="h-9 px-3 text-lg"
+          className="h-9 px-3 text-base"
           animated={animated}
           colorizeTime={colorizeTime}
           timeRanges={timeRanges}
